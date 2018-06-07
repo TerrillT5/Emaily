@@ -5,12 +5,15 @@ const keys = require('./config/keys');
 
 const app = express();
 
-passport.use(new GoogleStrategy({
+passport.use(
+  new GoogleStrategy({
   clientID: keys.googleClientID,
   clientSecret: keys.googleClientSecret,
   callbackURL: '/auth/google/callback'
-}, (accessToken) => {
-  console.log(accessToken);
+}, (accessToken, refreshToken, profile, done) => {
+  console.log('accessToken', accessToken);
+  console.log('refreshToken',refreshToken);
+  console.log('profile', profile)
    })
 );
 
