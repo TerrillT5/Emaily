@@ -1,21 +1,25 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const keys = require('../config/keys');
 const mongoose = require('mongoose');
+const keys = require('../config/keys');
 const User = mongoose.model('users');
 
-passport.serializeUser((user, done) => {
+// called when a user wants to generate an identifying piece of info
+ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(done)
+// takes identifying piece of info from cookie
+// passes into deserializeUser to turn it into
+// a user model that uniquely identifies the user
+ passport.deserializeUser((id, done) => {
+  User.findById(id)
   .then(user => {
     done(null, user);
   });
 });
 
-passport.use(
+ passport.use(
   new GoogleStrategy({
   clientID: keys.googleClientID,
   clientSecret: keys.googleClientSecret,
@@ -24,7 +28,8 @@ passport.use(
  // these are the callbacks
  (accessToken, refreshToken, profile, done) => {
    // makes sure that one user is not created multiple times
-   User.findOne({ googleId: profile.id }).then((existingUser) => {
+   User.findOne({ googleId: profile.id })
+   .then((existingUser) => {
      if (existingUser) {
        // already have a record with profile ID
        done(null, existingUser);
@@ -35,5 +40,6 @@ passport.use(
        .then(user => done(null, user));
      }
     })
-   })
+   }
+ )
 );

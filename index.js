@@ -1,18 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
+
 const passport = require('passport');
 const app = express();
 const keys = require('./config/keys');
 
 require('./models/User');
 require('./services/passport');
-require('./routes/authRoutes')(app);
 
 mongoose.connect(keys.mongoURI);
 // get method of request
 // path to handle then whats executed when a request comes in
 
+// how long this cookie is in browser
+// until it expires
+// 30 days, 24 hours, 60 mins, 60 secs, 1000 millisecs to 1 sec
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -20,9 +23,10 @@ app.use(
   })
 );
 
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 
+require('./routes/authRoutes')(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
