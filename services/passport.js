@@ -3,6 +3,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const mongoose = require('mongoose');
 const keys = require('../config/keys');
 const User = mongoose.model('users');
+const prod = require('../config/prod');
 
 // called when a user wants to generate an identifying piece of info
  passport.serializeUser((user, done) => {
@@ -23,7 +24,8 @@ const User = mongoose.model('users');
   new GoogleStrategy({
   clientID: keys.googleClientID,
   clientSecret: keys.googleClientSecret,
-  callbackURL: '/auth/google/callback'
+  callbackURL: prod.googleRedirectURI,
+  proxy: true 
  },
  // these are the callbacks
  (accessToken, refreshToken, profile, done) => {
