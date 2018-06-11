@@ -25,23 +25,19 @@ const prod = require('../config/prod');
   clientID: keys.googleClientID,
   clientSecret: keys.googleClientSecret,
   callbackURL: prod.googleRedirectURI,
-  proxy: true 
+  proxy: true
  },
  // these are the callbacks
- (accessToken, refreshToken, profile, done) => {
+ async (accessToken, refreshToken, profile, done) => {
    // makes sure that one user is not created multiple times
-   User.findOne({ googleId: profile.id })
-   .then((existingUser) => {
+  const existingUser = await User.findOne({ googleId: profile.id })
      if (existingUser) {
        // already have a record with profile ID
-       done(null, existingUser);
-     } else {
-       // dont have a user record with this ID, make a new record
-       new User({ googleId: profile.id})
-       .save()
-       .then(user => done(null, user));
+      return done(null, existingUser);
      }
-    })
+       // dont have a user record with this ID, make a new record
+    const user = await new User({ googleId: profile.id}).save()
+      done(null, user);
    }
- )
+  )
 );
