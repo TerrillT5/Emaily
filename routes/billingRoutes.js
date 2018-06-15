@@ -1,14 +1,19 @@
 const keys = require('../config/keys')
-const stripe = require('stripe')(keys.stripeSecretKey);
-
+const stripe = require('stripe')(keys.secretKey);
+console.log(keys, 'billingRoutes');
   module.exports = app => {
     app.post('/api/stripe', async (req, res) => {
     const charge = await stripe.charges.create({
-        amount: 3200,
+        amount: 500,
         currency: 'usd',
         description: '$5 for 5 credits',
         source: req.body.id
       });
-      console.log(charge);
+
+      req.user.credits =+ 5; // updates the Credits
+      const user = await req.user.save();
+
+      res.send(user);
     });
+
   }
