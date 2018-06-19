@@ -11,7 +11,7 @@ const requireLogin = require('../middlewares/requireLogin');
         source: req.body.id
       });
 
-      req.user.credits =+ 5; // updates the Credits
+      req.user.credits += 5; // updates the Credits
       const user = await req.user.save();
 
       res.send(user);
