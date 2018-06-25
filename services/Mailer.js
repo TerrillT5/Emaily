@@ -1,5 +1,5 @@
-const sendGrid = require('sendGrid');
-const helper = sendGrid.Mail;
+const sendgrid = require('sendgrid');
+const helper = sendgrid.Mail;
 
 const keys = require('../config/keys');
 
@@ -7,7 +7,7 @@ class Mailer extends helper.Mail {
   constructor({ subject, recipients}, content) {
     super()
 
-      this.sgApi = sendGrid(keys.sendGridKey);
+      this.sgApi = sendgrid(keys.sendGridKey);
       this.form_email = new helper.Email('no-reply@emaily.com');
       this.subject = subject;
       this.body = new helper.Content('text/html', content);
@@ -40,6 +40,7 @@ class Mailer extends helper.Mail {
    }
 
    async send = () => {
+     try {
      const request = this.sgApi.emptyRequest({
        method: 'POST',
        path: '/v3/mail/send',
@@ -48,7 +49,9 @@ class Mailer extends helper.Mail {
 
     const response = this.sgApi.API(request);
       return response
+   } catch(err) {
+      console.log(err);
    }
-
+  }
 }
 module.exports = Mailer;
