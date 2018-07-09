@@ -1,6 +1,6 @@
 const sendgrid = require('sendgrid');
 const helper = sendgrid.mail;
-const keys = require('../../config/keys'); 
+const keys = require('../../config/keys');
 
 class Mailer extends helper.Mail {
   constructor({subject, recipients}, content) {
@@ -41,6 +41,7 @@ class Mailer extends helper.Mail {
    }
 
    async send() {
+     try {
      const request = this.sgApi.emptyRequest({
        method: 'POST',
        path: '/v3/mail/send',
@@ -49,7 +50,10 @@ class Mailer extends helper.Mail {
 
     const response = this.sgApi.API(request);
       return response
+   } catch (err) {
+     console.log('Heres the error',err)
    }
+ }
 
 }
 
