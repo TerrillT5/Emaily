@@ -7,12 +7,22 @@ const RecipientSchema = require('./Recipient');
 // Survey & Recipient are separated for mongoDB storage capacity
 const surveySchema = new Schema({
   title: String,
+  email: String,
   body: String,
   subject: String,
   recipients:[RecipientSchema], // Email names to be sent
-  yes: { type: Number, default: 0},
-  no: { type: Number, default: 0},
-  _user: { type: Schema.Types.ObjectId, ref: 'User'},
+  yes: {
+     type: Number,
+     default: 0
+   },
+  no: {
+     type: Number,
+      default: 0
+  },
+  _user: {
+    type: Schema.Types.ObjectId,
+     ref: 'User'
+   },
   dateSent: Date,
   lastResponded: Date
  });
