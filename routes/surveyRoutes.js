@@ -8,6 +8,9 @@ const surveyTemplate = require('../services/emailTemplates/surveyTemplate');
 // https://github.com/farhantahir/emaily-app-mern-basics/blob/master/routes/surveys.js
 
 module.exports = app => {
+  app.get('/api/surveys/thanks', (req, res) => {
+    res.send("Thanks for voiting!");
+  });
   app.post('/api/surveys', requireLogin, requireCredits, (req, res) => {
   const { title, subject, body, recipients } = req.body;
 
@@ -18,7 +21,7 @@ module.exports = app => {
      recipients: recipients.split(',').map(recipient => ({ email: recipient.trim() })),
      _user: req.user.id,
      dateSent: Date.now()
-     })
+   });
      // Place to send an email
      const mailer = new Mailer(survey, surveyTemplate(survey));
      mailer.send();
