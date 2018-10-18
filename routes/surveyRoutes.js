@@ -5,8 +5,6 @@ const Mailer = require('../services/emailTemplates/Mailer');
 const Survey = mongoose.model('surveys');
 const surveyTemplate = require('../services/emailTemplates/surveyTemplate');
 
-// https://github.com/farhantahir/emaily-app-mern-basics/blob/master/routes/surveys.js
-
 module.exports = app => {
   app.get('/api/surveys/thanks', (req, res) => {
     res.send("Thanks for voiting!");
